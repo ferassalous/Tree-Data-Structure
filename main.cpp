@@ -37,8 +37,10 @@ public:
     void LCM(int choice1, int choice2);
     int Level(int index);
     Tree(const Tree& t);
-    int* childrenArray(int Node);
+    int& childrenArray(int Node);
     friend ostream& operator << (ostream& s, const Tree& tree);
+    void PrintPreOrder(int root);
+    void PreOrder();
 };
 //default constructor
 Tree::Tree()
@@ -59,7 +61,7 @@ Tree::Tree(int numberOfNodes)
 Tree::~Tree()
 {
     cout << "Tree Deleted"<<endl;
-        delete [] myParent;
+    delete [] myParent;
     
 }
 //copy constructor
@@ -252,27 +254,27 @@ void Tree::nodesAtLevel(int level)
 {
     for(int i = 0; i < size; ++i) // loop thru parent array.
     {
-       if(level == Level(i)) // if level == the Level(i) as this will return the level a certain node is at.
-       {
-           cout << i << " "; // print out that index.
-       }
+        if(level == Level(i)) // if level == the Level(i) as this will return the level a certain node is at.
+        {
+            cout << i << " "; // print out that index.
+        }
     }
     
 }
-int* Tree::childrenArray(int index)
+void Tree::PrintPreOrder(int root)
 {
-   int sizeOfChild = 1;
-    int* childrenOfNode = new int[sizeOfChild];
-    for(int i = 0; i < size; ++i) // loop thru the array.
-    {
-        if(index == myParent[i]) // if the index passed in, is the parent of a of a node in the array., then print that index it was equal at.
+    cout << root << " ";
+    for (int i = 0; i < size; ++i) {
+        if(root == myParent[i])
         {
-            childrenOfNode[i] = i;
-            index = i;
-            ++sizeOfChild;
+            PrintPreOrder(i);
         }
+        
     }
-    return childrenOfNode;
+}
+void Tree::PreOrder()
+{
+    PrintPreOrder(Root());
 }
 //display my tree.
 void Tree::display()
@@ -321,20 +323,36 @@ int main()
     }
     cout<< "This Is The Original Tree:"<<endl;
     cout << *myTree << endl;
-    cout << "This is the LCM OF Node 1 and Node 1:" << endl; myTree -> LCM(1,1); cout << endl;
-    cout << "This is my root:" << endl << myTree -> Root() <<endl;
-    cout << "These are the children of Node 12"<< endl;myTree -> children(12);cout << endl;
-    cout << "This is the parent of Node 5: "<< endl; myTree -> parent(5); cout << endl;
-    cout << "These are the siblings of Node 9:"<<endl; myTree -> siblings(9);cout<< endl;
-    cout << "This is the Level of Node 12:" << endl;cout <<  myTree -> Level(4);cout<<endl;
-    cout << "This is the Level of Node 5:" << endl;cout <<  myTree -> Level(5);cout<<endl;
-    cout << "This is the LCM of Node 3 and Node 8:" << endl; myTree -> LCM(3, 8); cout << endl;
-    cout << "These are the Nodes at Level 3:" << endl;  myTree -> nodesAtLevel(3); cout << endl;
-    // cout << "These are the Nodes at Level 3:"; myTree -> nodesAtLevel(3);
-    cout << "This is the Height of the tree:" << endl << myTree -> Height() << endl;
     Tree* newTree = new Tree(*myTree);
     cout << "The Tree we just copied:" <<endl;
     cout << *newTree << endl;
+    cout << "The Root Of The Tree is:" << endl << myTree -> Root() <<endl;
+    cout << "This is the Least Common Ancestor of Node 3 and Node 8:" << endl; myTree -> LCM(3, 8); cout << endl;
+    cout << "This is the Least Common Ancestor of Node 13 and Node 11:" << endl; myTree -> LCM(13, 11); cout << endl;
+    cout << "This is the Least Common Ancestor of Node 13 and Node 8:" << endl; myTree -> LCM(13, 8); cout << endl;
+    
+    cout << "These are the children of Node 10 is/are:"<< endl;myTree -> children(10);cout << endl;
+    cout << "These are the children of Node 12 is/are:"<< endl;myTree -> children(12);cout << endl;
+    
+    cout << "These are the siblings of Node 3 is/are:"<<endl; myTree -> siblings(3);cout<< endl;
+    cout << "These are the siblings of Node 12:"<<endl; myTree -> siblings(12);cout<< endl;
+    
+    cout << "These are the Nodes at Level 3:" << endl;  myTree -> nodesAtLevel(3); cout << endl;
+    
+    cout << "This is the Height of the tree:" << endl << myTree -> Height() << endl;
+    
+    cout << "The Level of node 3 in the tree is: " << endl; cout <<  myTree -> Level(3);cout<<endl;
+    cout << "The Level of node 12 in the tree is" << endl;cout <<  myTree -> Level(12);cout<<endl;
+    
+    cout << "This is the parent of Node 5: "<< endl; myTree -> parent(5); cout << endl;
+    
+    
+    cout << "This is the LCM OF Node 1 and Node 1:" << endl; myTree -> LCM(1,1); cout << endl;
+    cout << "This is my Tree in PreOrder:" << endl; myTree -> PreOrder(); cout << endl;
+    // cout << "These are the Nodes at Level 3:"; myTree -> nodesAtLevel(3);
+    
+    
+    
     delete myTree;
     delete newTree;
     return 0;
